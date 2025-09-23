@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { remark } from 'remark'
-import html from 'remark-html'
+import remarkHtml from 'remark-html'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 
@@ -38,7 +38,7 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const { data, content } = matter(fileContents)
   
-  const processedContent = await remark().use(html).process(content)
+  const processedContent = await remark().use(remarkHtml).process(content)
   const contentHtml = processedContent.toString()
   
   return {
