@@ -13,10 +13,15 @@ export interface Post {
   excerpt: string
   author?: string
   tags?: string[]
+  featured?: boolean
+  readTime?: string 
   contentHtml?: string
 }
 
 export function getAllPosts(): Post[] {
+  if (!fs.existsSync(postsDirectory)) {
+    return []
+  }
   const fileNames = fs.readdirSync(postsDirectory)
   return fileNames
     .filter(name => name.endsWith('.md'))
@@ -31,6 +36,10 @@ export function getAllPosts(): Post[] {
       } as Post
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+}
+
+export function getFeaturedPosts(): Post[] {
+  return getAllPosts().filter(post => post.featured)
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
