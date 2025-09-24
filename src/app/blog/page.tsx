@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { getAllPosts } from '../../lib/posts'
+import Link from "next/link";
+import { getAllPosts } from "../../lib/posts";
 
 export default function BlogPage() {
-  const posts = getAllPosts()
+  const posts = getAllPosts();
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -10,7 +10,10 @@ export default function BlogPage() {
       <div className="space-y-6">
         {posts.map((post) => (
           <article key={post.slug} className="border-b pb-6">
-            <Link href={`/blog/${post.slug}`} className="block hover:opacity-80">
+            <Link
+              href={`/blog/${post.slug}`}
+              className="block hover:opacity-80"
+            >
               <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
               <p className="text-gray-600 mb-2">{post.excerpt}</p>
               <div className="text-sm text-gray-500">
@@ -18,7 +21,10 @@ export default function BlogPage() {
                 {post.tags && (
                   <span className="ml-4">
                     {post.tags.map((tag: string) => (
-                      <span key={tag} className="inline-block bg-gray-200 px-2 py-1 rounded mr-2">
+                      <span
+                        key={tag}
+                        className="inline-block bg-gray-200 px-2 py-1 rounded mr-2"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -30,5 +36,5 @@ export default function BlogPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
