@@ -8,7 +8,10 @@ pipeline {
     stages {
         stage("Checkout") {
             steps {
-                git url: 'https://github.com/calisera-io/calisera-project-blog.git'
+                git(
+                    branch: 'pipeline',
+					url: 'https://github.com/calisera-io/calisera-project-blog.git'
+				) 
             }
         }
     }
