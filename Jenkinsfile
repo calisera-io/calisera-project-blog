@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    docker.image('amazon/aws-cli').inside {
+                    docker.image('amazon/aws-cli').inside('--entrypoint="" -u root:root') {
                         sh """
                             aws s3 sync ${ARTIFACT_DIR}/ s3://${AWS_BUCKET}/ --delete \
                                 --region ${AWS_DEFAULT_REGION}

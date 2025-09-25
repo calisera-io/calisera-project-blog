@@ -1,5 +1,5 @@
 ---
-title: "My First Blog Post"
+title: "First Blog Post"
 date: "2024-01-15"
 excerpt: "This is my first blog post using Next.js and markdown"
 author: "Your Name"
