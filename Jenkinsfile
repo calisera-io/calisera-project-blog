@@ -7,6 +7,12 @@ pipeline {
         skipDefaultCheckout(true) 
     }
 
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_BUCKET = 'blog.calisera.io'
+        ARTIFACT_DIR = 'out'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,6 +22,7 @@ pipeline {
 				) 
             }
         }
+
         stage('Build') {
             steps {
                 script {
@@ -24,6 +31,19 @@ pipeline {
                         sh 'npm -v'
                         sh 'npm install'
                         sh 'npm run build'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    docker.image('amazon/aws-cli').inside {
+                        sh """
+                            aws s3 sync ${ARTIFACT_DIR}/ s3://${AWS_BUCKET}/ --delete \
+                                --region ${AWS_DEFAULT_REGION}
+                        """
                     }
                 }
             }
