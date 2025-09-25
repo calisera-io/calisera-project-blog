@@ -1,12 +1,12 @@
 ---
-title: "First Blog Post"
+title: "First Blog Post (Revised)"
 date: "2024-01-15"
 excerpt: "This is my first blog post using Next.js and markdown"
 author: "Your Name"
 tags: ["nextjs", "blog", "markdown"]
 ---
 
-# Welcome to My Blog
+# Welcome to My Blog Site
 
 This is my first blog post! I'm using **Next.js** with static generation to create a fast, SEO-friendly blog.
 
