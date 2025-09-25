@@ -12,6 +12,7 @@ This is my first blog post! I'm using **Next.js** with static generation to crea
 
 ## Features
 
+- Made by me <-
 - Static site generation
 - Markdown support with gray-matter
 - Tailwind CSS styling
