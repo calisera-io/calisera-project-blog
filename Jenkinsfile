@@ -3,6 +3,17 @@ pipeline {
         label 'ec2-worker'
     }
 
+    triggers {
+        githubPush()
+        githubPullRequests(
+            triggerMode: 'HEAVY_HOOKS',
+            events: [
+                Open(), 
+                Synchronize()
+            ]
+        )
+    }
+
     options {
         skipDefaultCheckout(true) 
     }
