@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter_Tight, JetBrains_Mono } from "next/font/google";
-import './globals.css';
+import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -11,7 +13,7 @@ const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
   weight: ["400", "700"],
-}); 
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +30,20 @@ export default function RootLayout({
       <body
         className={`${interTight.variable} ${jetBrainsMono.variable} antialiased`}
       >
-        {children}
+        <div className="gradient-container mb-16" id="container">
+          <div className="gradient-orbs-light">
+            <div className="third-orb"></div>
+            <div className="fourth-line"></div>
+          </div>
+
+          <div className="gradient-orbs-dark">
+            <div className="third-orb"></div>
+            <div className="fourth-line"></div>
+          </div>
+          <Header />
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );

@@ -24,30 +24,188 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Custom prose styling */
-.prose ol {
-  list-style-type: decimal;
-  margin-left: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
+@layer utilities {
 
-.prose ul {
-  list-style-type: disc;
-  margin-left: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
+  .prose-bold strong,
+  .prose-headings-medium h1,
+  .prose-headings-medium h2,
+  .prose-headings-medium h3,
+  .prose-headings-medium h4,
+  .prose-headings-medium h5,
+  .prose-headings-medium h6 {
+    font-weight: 500;
+  }
 
-.prose li {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
+  /* Mobile-first responsive heading sizes */
+  .prose-responsive h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
 
-/* Make all inline code and pre blocks use JetBrains Mono */
-@layer base {
+  .prose-responsive h2 {
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-3xl;
+  }
+
+  .prose-responsive h3 {
+    @apply text-lg md:text-xl lg:text-2xl xl:text-2xl;
+  }
+
+  .prose-responsive h4 {
+    @apply text-lg md:text-xl lg:text-xl xl:text-2xl;
+  }
+
+  .prose-responsive h5 {
+    @apply text-base md:text-lg lg:text-xl xl:text-2xl;
+  }
+
+  .prose-responsive h6 {
+    @apply text-sm md:text-base lg:text-lg xl:text-xl;
+  }
+
   .prose code,
   .prose pre {
     font-family: var(--font-mono);
+  }
+
+  .prose-tight-spacing ul li,
+  .prose-tight-spacing ol li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-tight-spacing h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .gradient-container {
+    position: relative;
+    min-height: 100vh;
+    /* background: #FAFAFA; */
+    overflow: hidden;
+  }
+
+  /* Jua-style gradient lines - Light Mode */
+  .gradient-orbs-light {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .gradient-orbs-light::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 10%;
+    width: 800px;
+    height: 150px;
+    background: linear-gradient(90deg, #fecfaa, #ff811a);
+    border-radius: 30px;
+    opacity: 0.4;
+    filter: blur(40px);
+    transform: rotate(-15deg);
+  }
+
+  .gradient-orbs-light::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    width: 700px;
+    height: 40px;
+    background: linear-gradient(90deg, #0AB8DC, #8fb6fa);
+    border-radius: 40px;
+    opacity: 0.3;
+    filter: blur(50px);
+    transform: rotate(25deg);
+  }
+
+  /* Third line for more depth */
+  .gradient-orbs-light .third-orb {
+    position: absolute;
+    top: 30%;
+    left: 32%;
+    width: 600px;
+    height: 90px;
+    background: linear-gradient(90deg, #1eceff, #1dc3ff, #1bf7ff);
+    border-radius: 20px;
+    opacity: 0.25;
+    filter: blur(35px);
+    transform: rotate(15deg);
+  }
+
+  /* Fourth diagonal line */
+  .gradient-orbs-light .fourth-line {
+    position: absolute;
+    top: 75%;
+    left: 5%;
+    width: 500px;
+    height: 50px;
+    background: linear-gradient(90deg, #FABD8F, #e06eff);
+    border-radius: 25px;
+    opacity: 0.2;
+    filter: blur(45px);
+    transform: rotate(-35deg);
+  }
+
+  /* Dark mode gradient lines */
+  .gradient-orbs-dark {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    display: none;
+  }
+
+  .gradient-orbs-dark::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 800px;
+    height: 60px;
+    background: linear-gradient(90deg, #0AB8DC, #2d8388);
+    border-radius: 30px;
+    opacity: 0.4;
+    filter: blur(20px);
+    transform: rotate(-15deg);
+  }
+
+  .gradient-orbs-dark::after {
+    content: '';
+    position: absolute;
+    top: 60%;
+    right: 10%;
+    width: 700px;
+    height: 80px;
+    background: linear-gradient(90deg, #e3b342, #ff8921);
+    border-radius: 40px;
+    opacity: 0.3;
+    filter: blur(50px);
+    transform: rotate(25deg);
+  }
+
+  .gradient-orbs-dark .third-orb {
+    position: absolute;
+    top: 40%;
+    left: 30%;
+    width: 600px;
+    height: 40px;
+    background: linear-gradient(90deg, #0AB8DC, #E34290, #752D88);
+    border-radius: 20px;
+    opacity: 0.25;
+    filter: blur(35px);
+    transform: rotate(5deg);
+  }
+
+  .gradient-orbs-dark .fourth-line {
+    position: absolute;
+    top: 75%;
+    left: 5%;
+    width: 500px;
+    height: 50px;
+    background: linear-gradient(90deg, #0AB8DC, #E34290);
+    border-radius: 25px;
+    opacity: 0.2;
+    filter: blur(45px);
+    transform: rotate(-35deg);
   }
 }

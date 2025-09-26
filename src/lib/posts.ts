@@ -16,6 +16,22 @@ export interface Post {
   featured?: boolean
   readTime?: string 
   contentHtml?: string
+  featuredImages?: string[]
+  heroImage?: string
+  imageAlt?: string
+}
+
+export interface Tag {
+  name: string
+  slug: string
+  displayName: string
+  count: number
+}
+
+export interface OrderedPosts {
+  featuredPost: Post | null
+  regularPosts: Post[]
+  totalCount: number
 }
 
 export function getAllPosts(): Post[] {
@@ -56,3 +72,87 @@ export async function getPostBySlug(slug: string): Promise<Post> {
     ...data
   } as Post
 }
+
+export function getAllTags(): Tag[] {
+  const allPosts = getAllPosts()
+  const tagCounts = new Map<string, number>()
+  
+  allPosts.forEach(post => {
+    if (post.tags && Array.isArray(post.tags)) {
+      post.tags.forEach(tag => {
+        const normalizedTag = tag.toLowerCase().trim()
+        tagCounts.set(normalizedTag, (tagCounts.get(normalizedTag) || 0) + 1)
+      })
+    }
+  })
+  
+  return Array.from(tagCounts.entries())
+    .map(([tagName, count]) => ({
+      name: tagName,
+      slug: tagName.replace(/\s+/g, '-').toLowerCase(),
+      displayName: tagName.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' '),
+      count
+    }))
+    .sort((a, b) => b.count - a.count)
+}
+
+export function getPostsByTag(targetTag: string): Post[] {
+  const allPosts = getAllPosts()
+  const normalizedTargetTag = targetTag.toLowerCase().trim()
+  
+  return allPosts.filter(post => 
+    post.tags && 
+    Array.isArray(post.tags) && 
+    post.tags.some(tag => tag.toLowerCase().trim() === normalizedTargetTag)
+  )
+}
+
+export function getOrderedPosts(tagFilter?: string): OrderedPosts {
+  // Get base data
+  const allPosts = getAllPosts()
+  const featuredPosts = getFeaturedPosts()
+  
+  // No tag filter - simple case
+  if (!tagFilter) {
+    return {
+      featuredPost: featuredPosts[0] || null,
+      regularPosts: allPosts.filter(post => !post.featured),
+      totalCount: allPosts.length
+    }
+  }
+  
+  // Tag filter - get posts with tag
+  const taggedPosts = getPostsByTag(tagFilter)
+  const sortedTaggedPosts = [...taggedPosts].sort((a, b) => 
+    new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
+  
+  // Find featured post with this tag
+  const featuredWithTag = featuredPosts.find(post => 
+    hasTag(post, tagFilter)
+  )
+  
+  // Determine featured post
+  const featuredPost = featuredWithTag || sortedTaggedPosts[0] || null
+  
+  // Get regular posts (everything except the featured one)
+  const regularPosts = sortedTaggedPosts.filter(post => 
+    post.slug !== featuredPost?.slug
+  )
+  
+  return {
+    featuredPost,
+    regularPosts,
+    totalCount: taggedPosts.length
+  }
+}
+
+// Helper function to check if post has tag
+function hasTag(post: Post, targetTag: string): boolean {
+  return post.tags?.some(tag => 
+    tag.toLowerCase().trim() === targetTag.toLowerCase().trim()
+  ) ?? false
+}
+
