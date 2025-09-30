@@ -108,7 +108,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
           )}
 
           {/* Featured Article Section */}
-          {featuredPost && regularPosts.length > 0 && (
+          {featuredPost && (
             <section aria-labelledby="featured-heading">
               <h2 
                 id="featured-heading"
