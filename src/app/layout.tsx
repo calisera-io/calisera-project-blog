@@ -30,20 +30,9 @@ export default function RootLayout({
       <body
         className={`${interTight.variable} ${jetBrainsMono.variable} antialiased`}
       >
-        <div className="gradient-container mb-16" id="container">
-          <div className="gradient-orbs-light">
-            <div className="third-orb"></div>
-            <div className="fourth-line"></div>
-          </div>
-
-          <div className="gradient-orbs-dark">
-            <div className="third-orb"></div>
-            <div className="fourth-line"></div>
-          </div>
           <Header />
           {children}
           <Footer />
-        </div>
       </body>
     </html>
   );
