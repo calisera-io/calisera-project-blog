@@ -27,13 +27,40 @@ pipeline {
             }
         }
 
+        stage('Install') {
+            steps {
+                script {
+                    docker.image('node:20').inside('-u root:root') {
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                script {
+                    docker.image('node:20').inside('-u root:root') {
+                        sh 'npm run lint'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    docker.image('node:20').inside('-u root:root') {
+                        sh 'npm test'
+                    }
+                }
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
                     docker.image('node:20').inside('-u root:root') {
-                        sh 'node -v'
-                        sh 'npm -v'
-                        sh 'npm install'
                         sh 'npm run build'
                     }
                 }
