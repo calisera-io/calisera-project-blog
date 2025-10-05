@@ -59,6 +59,9 @@ pipeline {
         }
 
         stage('Deploy') {
+            when {
+                branch 'main'
+            }
             steps {
                 script {
                     docker.image('amazon/aws-cli').inside('--entrypoint="" -u root:root') {
