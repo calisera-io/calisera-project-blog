@@ -16,7 +16,10 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git( 
+                    url: 'https://github.com/calisera-io/calisera-project-blog.git', 
+                    branch: env.BRANCH_NAME     
+                )       
             }
         }
 
