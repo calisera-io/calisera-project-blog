@@ -13,7 +13,7 @@ export default function RegularPostCard({ post }: PostCardProps) {
       aria-label={`Article: ${post.title}`}
     >
       <Link 
-        href={`/blog/${post.slug}`} 
+        href={`/blog/post/${post.slug}`} 
         className="block hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-[32px]"
         aria-label={`Read article: ${post.title}`}
       >

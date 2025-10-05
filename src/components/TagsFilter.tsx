@@ -1,74 +1,48 @@
-'use client'
-
-import { useRouter, useSearchParams } from 'next/navigation'
-
-interface Tag {
-  name: string
-  slug: string
-  displayName: string
-  count: number
-}
+import Link from "next/link";
+import { Tag } from '@/lib/posts';
 
 interface TagsFilterProps {
-  tags: Tag[]
+  tags: Tag[];
+  activeTagName?: string;
 }
 
-export default function TagsFilter({ tags }: TagsFilterProps) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const activeTag = searchParams.get('tag')
-
-  const handleTagClick = (tagSlug: string) => {
-    const current = new URLSearchParams(Array.from(searchParams.entries()))
-    
-    if (activeTag === tagSlug) {
-      // Remove tag filter if clicking the same tag
-      current.delete('tag')
-    } else {
-      // Set new tag filter
-      current.set('tag', tagSlug)
-    }
-
-    const search = current.toString()
-    const query = search ? `?${search}` : ''
-    router.push(`/blog${query}`)
-  }
-
-  const clearFilter = () => {
-    router.push('/blog')
-  }
-
-  if (tags.length === 0) {
-    return null
-  }
-
+export default function TagsFilter({ tags, activeTagName }: TagsFilterProps) {
   return (
-      <div className="max-w-7xl mx-auto py-8">
-        <div className="flex flex-wrap gap-3">
-          {/* Show "All" button when a tag is active */}
-          {activeTag && (
-            <button
-              onClick={clearFilter}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-            >
-              All Posts
-            </button>
-          )}
-          
-          {tags.map((tag) => (
-            <button
-              key={tag.slug}
-              onClick={() => handleTagClick(tag.slug)}
-              className={`inline-flex items-center gap-1.5 px-4 py-1 rounded-3xl text-sm transition-colors ${
-                activeTag === tag.slug
-                  ? 'bg-[#EFE6FF] text-black/70' // Active state
-                  : 'bg-[#EFE6FF]/20 text-black/70 dark:text-[#EFE6FF] hover:bg-[#EFE6FF]/70'
+    <ul
+      className="flex flex-wrap gap-3 mt-6 mb-10"
+      role="list"
+      aria-label="Filter blog posts by tag"
+    >
+      <li>
+        <Link
+          href="/blog"
+          className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+            !activeTagName
+              ? "bg-blue-600 text-white border-blue-600"
+              : "text-gray-700 dark:text-gray-300 border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+        >
+          All
+        </Link>
+      </li>
+
+      {tags.map((tag) => {
+        const isActive = tag.name === activeTagName;
+        return (
+          <li key={tag.name}>
+            <Link
+              href={`/blog/${tag.name}`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                isActive
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "text-gray-700 dark:text-gray-300 border-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}
             >
-              {tag.displayName}
-            </button>
-          ))}
-        </div>
-      </div>
-  )
+              {tag.name}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
 }

@@ -9,7 +9,7 @@ interface FeaturedPostCardProps {
 
 export default function FeaturedPostCard({ post }: FeaturedPostCardProps) {
   return (
-    <Link href={`/blog/${post.slug}`}>
+    <Link href={`/blog/post/${post.slug}`}>
       <article className="w-full rounded-[32px] border border-[#E4E4E4] dark:border-[#404551] bg-white dark:bg-[#111827] p-6 md:p-8 text-left shadow-none transition-shadow hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)] max-w-none cursor-pointer">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Content Section */}
