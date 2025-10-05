@@ -9,13 +9,15 @@ pipeline {
         ARTIFACT_DIR = 'out'
     }
 
+    options {
+        skipDefaultCheckout(false)
+
+    }
+    
     stages {
         stage('Checkout') {
             steps {
-                git(
-                    branch: 'how-to-blog',
-					url: 'https://github.com/calisera-io/calisera-project-blog.git'
-				) 
+                checkout scm
             }
         }
 
@@ -23,7 +25,7 @@ pipeline {
             steps {
                 script {
                     docker.image('node:20').inside('-u root:root') {
-                        sh 'npm install'
+                        sh 'npm ci'
                     }
                 }
             }
