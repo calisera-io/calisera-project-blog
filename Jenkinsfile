@@ -13,7 +13,7 @@ pipeline {
         skipDefaultCheckout(false)
 
     }
-    
+
     stages {
         stage('Checkout') {
             steps {
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     docker.image('node:20').inside('-u root:root') {
-                        sh 'npm ci'
+                        sh 'npm install'
                     }
                 }
             }
