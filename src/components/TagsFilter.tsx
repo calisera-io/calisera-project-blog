@@ -11,10 +11,9 @@ interface Tag {
 
 interface TagsFilterProps {
   tags: Tag[]
-  className?: string
 }
 
-export default function TagsFilter({ tags, className = '' }: TagsFilterProps) {
+export default function TagsFilter({ tags }: TagsFilterProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const activeTag = searchParams.get('tag')

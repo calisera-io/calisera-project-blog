@@ -137,7 +137,7 @@ export default function HomePage() {
               <strong className="text-medium">
                 Calisera is our hands-on learning project.
               </strong>{" "}
-              We're building a complete appointment booking application from the
+              We&amp;re building a complete appointment booking application from the
               ground up—tackling architecture decisions, API design, user
               interface development, and deployment. We chose to focus on
               Instagram-based service providers because it presents real
@@ -151,8 +151,8 @@ export default function HomePage() {
               As we work through building Calisera, we write about the important
               choices we make: why we chose our tech stack, how we approached
               major features, what architecture patterns we implemented, and
-              which solutions worked (or didn't). These aren't daily
-              logs—they're reflections on the significant development milestones
+              which solutions worked (or didn&amp;apos;t). These aren&amp;apos;t daily
+              logs—they&amp;apos;re reflections on the significant development milestones
               and lessons learned along the way.
             </p>
           </div>
@@ -205,10 +205,10 @@ export default function HomePage() {
           </h2>
           <p className="text-lg text-[#404551] dark:text-gray-300 mb-12">
             Traditional booking platforms assume you have a website and
-            desktop-focused business, but today's entrepreneurs are
-            mobile-native and Instagram-first. We're developing Calisera to
+            desktop-focused business, but today&amp;s entrepreneurs are
+            mobile-native and Instagram-first. We&amp;re developing Calisera to
             bridge this gap with features designed for your actual workflow.
-            Here are the key features we're building:
+            Here are the key features we&amp;re building:
           </p>
           <CoreFeaturesGrid />
         </div>
@@ -294,7 +294,7 @@ export default function HomePage() {
                 Tech Lead
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Marcus is Calisera's Lead Developer with over 20 years of
+                Marcus is Calisera&amp;s Lead Developer with over 20 years of
                 experience. He drives technical decision-making and has
                 architected our secure microservice infrastructure, ensuring
                 Calisera delivers exceptional performance on a scalable, secure

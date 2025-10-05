@@ -102,7 +102,7 @@ export default function BlogPage({ searchParams }: BlogPageProps) {
             <div className="mb-8" role="status" aria-live="polite">
               <p className="text-gray-600 dark:text-gray-300">
                 <span className="sr-only">Currently showing: </span>
-                Filtered by <strong>"{tag}"</strong> - {totalCount} article{totalCount !== 1 ? 's' : ''} found
+                Filtered by <strong>&quot;{tag}&quot;</strong> - {totalCount} article{totalCount !== 1 ? 's' : ''} found
               </p>
             </div>
           )}
