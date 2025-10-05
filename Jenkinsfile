@@ -71,11 +71,7 @@ pipeline {
 
         stage('Deploy') {
             when {
-                allOf {
-                    expression { env.CHANGE_ID }
-                    expression { env.CHANGE_MERGED == 'true' }
-                    expression { env.CHANGE_TARGET == 'master' }
-                }
+                branch 'main'
             }
             steps {
                 script {
