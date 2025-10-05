@@ -136,24 +136,24 @@ export default function HomePage() {
             <p className="text-lg text-[#404551] dark:text-gray-300 max-w-3xl mb-8">
               <strong className="text-medium">
                 Calisera is our hands-on learning project.
-              </strong>{" "}
-              We&amp;re building a complete appointment booking application from the
-              ground up—tackling architecture decisions, API design, user
+              </strong>{' '}
+              {(`We're building a complete appointment booking application from the
+              ground up — tackling architecture decisions, API design, user
               interface development, and deployment. We chose to focus on
               Instagram-based service providers because it presents real
               technical challenges: mobile-first design, social platform
-              integration, and real-time scheduling systems.
+              integration, and real-time scheduling systems.`)}
             </p>
             <p className="text-lg text-[#404551] dark:text-gray-300 max-w-3xl">
               <strong className="text-medium">
                 This blog documents our key product decisions.
-              </strong>{" "}
-              As we work through building Calisera, we write about the important
+              </strong>{' '}
+              {(`As we work through building Calisera, we write about the important
               choices we make: why we chose our tech stack, how we approached
               major features, what architecture patterns we implemented, and
-              which solutions worked (or didn&amp;apos;t). These aren&amp;apos;t daily
-              logs—they&amp;apos;re reflections on the significant development milestones
-              and lessons learned along the way.
+              which solutions worked (or didn't). These aren't daily
+              logs—they're reflections on the significant development milestones
+              and lessons learned along the way.`)}
             </p>
           </div>
         </div>
@@ -179,8 +179,8 @@ export default function HomePage() {
           </h2>
           <div className="relative z-10 max-w-7xl mx-auto text-center pb-16">
             <p className="text-lg text-[#404551] dark:text-gray-300 max-w-5xl mx-auto px-4 mb-6">
-              Many service providers today—hairstylists, personal trainers,
-              freelancers—run their entire business through Instagram. They
+              Many service providers today — hairstylists, personal trainers,
+              freelancers — run their entire business through Instagram. They
               showcase work, engage clients, and handle inquiries all through
               social media. But existing booking tools assume you have a
               traditional website and desktop workflow.
@@ -204,11 +204,11 @@ export default function HomePage() {
             Core Features
           </h2>
           <p className="text-lg text-[#404551] dark:text-gray-300 mb-12">
-            Traditional booking platforms assume you have a website and
-            desktop-focused business, but today&amp;s entrepreneurs are
-            mobile-native and Instagram-first. We&amp;re developing Calisera to
+            {(`Traditional booking platforms assume you have a website and
+            desktop-focused business, but today's entrepreneurs are
+            mobile-native and Instagram-first. We're developing Calisera to
             bridge this gap with features designed for your actual workflow.
-            Here are the key features we&amp;re building:
+            Here are the key features we're building:`)}
           </p>
           <CoreFeaturesGrid />
         </div>
@@ -294,11 +294,11 @@ export default function HomePage() {
                 Tech Lead
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Marcus is Calisera&amp;s Lead Developer with over 20 years of
+                {(`Marcus is Calisera's Lead Developer with over 20 years of
                 experience. He drives technical decision-making and has
                 architected our secure microservice infrastructure, ensuring
                 Calisera delivers exceptional performance on a scalable, secure
-                foundation.
+                foundation.`)}
               </p>
             </article>
 
