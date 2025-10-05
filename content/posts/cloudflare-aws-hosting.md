@@ -13,7 +13,7 @@ heroImage: "https://picsum.photos/800/400"
 S3 bucket
 static website hosting
 public access
-policy
+bucket policy
 
 Cloudflare DNS
 Cloudflare CDN
