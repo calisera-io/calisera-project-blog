@@ -29,21 +29,21 @@ pipeline {
             }
         }
         
-        stage('Lint') {
-            steps {
-                script {
-                    docker.image('node:20').inside('-u root:root') {
-                        sh 'npm run lint'
-                    }
-                }
-            }
-        }
-
         stage('Install') {
             steps {
                 script {
                     docker.image('node:20').inside('-u root:root') {
                         sh 'npm ci'
+                    }
+                }
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                script {
+                    docker.image('node:20').inside('-u root:root') {
+                        sh 'npm run lint'
                     }
                 }
             }
