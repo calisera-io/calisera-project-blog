@@ -23,27 +23,27 @@ pipeline {
             }
         }
 
-        stage('Fix Permissions') {
+        stage('Permissions') {
             steps {
                 sh 'sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace'
             }
         }
         
-        stage('Install') {
-            steps {
-                script {
-                    docker.image('node:20').inside('-u root:root') {
-                        sh 'npm install'
-                    }
-                }
-            }
-        }
-
         stage('Lint') {
             steps {
                 script {
                     docker.image('node:20').inside('-u root:root') {
                         sh 'npm run lint'
+                    }
+                }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                script {
+                    docker.image('node:20').inside('-u root:root') {
+                        sh 'npm ci'
                     }
                 }
             }
