@@ -9,13 +9,15 @@ pipeline {
         ARTIFACT_DIR = 'out'
     }
 
+    options {
+        skipDefaultCheckout(false)
+
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git(
-                    branch: 'main',
-					url: 'https://github.com/calisera-io/calisera-project-blog.git'
-				) 
+                checkout scm
             }
         }
 
