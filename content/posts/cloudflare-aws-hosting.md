@@ -14,3 +14,4 @@ S3 bucket
 static website hosting
 
 Cloudflare DNS
+Cloudflare CDN

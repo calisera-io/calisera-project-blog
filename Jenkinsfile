@@ -20,6 +20,12 @@ pipeline {
             }
         }
 
+        stage('Fix Permissions') {
+            steps {
+                sh 'sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace'
+            }
+        }
+        
         stage('Install') {
             steps {
                 script {
