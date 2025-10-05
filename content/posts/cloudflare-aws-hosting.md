@@ -9,3 +9,5 @@ heroImage: "https://picsum.photos/800/400"
 ---
 
 # Hosting this blog on AWS leveraging Cloudflare DNS and CDN
+
+S3 bucket
