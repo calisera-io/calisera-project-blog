@@ -8,7 +8,7 @@ featuredImages: ["/images/blog/placeholder.png"]
 heroImage: "https://picsum.photos/800/400"
 ---
 
-# Hosting this blog on AWS leveraging Cloudflare DNS and CDN
+# Blog workflow
 
 S3 bucket
 static website hosting
