@@ -3,7 +3,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 
   client_id_list = ["sts.amazonaws.com"]
 
-  thumbprint_list = ["7560D6F40FA55195F740EE2B1B7C0B4836CBE103"]
+  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
 }
 
 resource "aws_iam_role" "github_actions" {
@@ -16,7 +16,7 @@ resource "aws_iam_role" "github_actions" {
       Principal = {
         Federated = aws_iam_openid_connect_provider.github.arn
       }
-      Action = "sts:AssumeRole"
+      Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringEquals = {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
