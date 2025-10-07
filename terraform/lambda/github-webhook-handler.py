@@ -3,10 +3,6 @@ import hmac
 import hashlib
 import boto3 # type: ignore
 import urllib.parse
-import urllib3 # type: ignore
-
-http = urllib3.PoolManager()
-ssm = boto3.client('ssm')
 
 def lambda_handler(event, context):
 
@@ -14,6 +10,7 @@ def lambda_handler(event, context):
     if not body:
         return {"statusCode": 400, "body": "Empty body"}
     
+    ssm = boto3.client('ssm')
     secret = ssm.get_parameter(
         Name="/jenkins/dev/github_webhook_secret",
         WithDecryption=True
@@ -59,7 +56,12 @@ def lambda_handler(event, context):
                 payload['pull_request']['base']['ref'] == "main"
             )
             if is_merged_to_main:
-                print(json.dumps(payload, indent=2))
+                codebuild = boto3.client('codebuild')
+                codebuild.start_build(
+                    projectName='nextjs-build-deploy',
+                    sourceVersion=payload['after']
+                )
+                print(f"Started build for commit {payload['after'][:7]}")
         elif event_type == "status":
             print(f"Status update: {payload['state']} for {payload['sha'][:7]}")
 
