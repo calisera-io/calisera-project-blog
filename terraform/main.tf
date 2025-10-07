@@ -3,7 +3,7 @@ data "archive_file" "webhook_handler_zip" {
   output_path = "${path.module}/lambda/github-webhook-handler.zip"
   source {
     content  = file("${path.module}/lambda/github-webhook-handler.py")
-    filename = "github-webhook-handler.py"
+    filename = "github_webhook_handler.py"
   }
 }
 
