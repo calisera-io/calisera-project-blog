@@ -8,7 +8,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 
 resource "aws_iam_role" "github_actions" {
   name = "github-actions-deploy-role"
-
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -20,7 +20,9 @@ resource "aws_iam_role" "github_actions" {
       Condition = {
         StringEquals = {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          "token.actions.githubusercontent.com:sub" = "repo:calisera-io/calisera-project-blog:ref:refs/heads/main"
+        }
+        StringLike = {
+          "token.actions.githubusercontent.com:sub" = "repo:calisera-io/calisera-project-blog:*"
         }
       }
     }]
