@@ -53,7 +53,12 @@ def lambda_handler(event, context):
             print(f"Push to {payload['repository']['name']}")
         elif event_type == "pull_request":
             print(f"Pull request {payload['action']}: {payload['pull_request']['title']}")
-            if payload['action'] == "closed" and payload['pull_request']['merged']:
+            is_merged_to_main = (
+                payload['action'] == "closed" and 
+                payload['pull_request']['merged'] and 
+                payload['pull_request']['base']['ref'] == "main"
+            )
+            if is_merged_to_main:
                 print(json.dumps(payload, indent=2))
         elif event_type == "status":
             print(f"Status update: {payload['state']} for {payload['sha'][:7]}")
