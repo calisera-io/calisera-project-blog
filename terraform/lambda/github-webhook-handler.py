@@ -56,12 +56,19 @@ def lambda_handler(event, context):
                 payload['pull_request']['base']['ref'] == "main"
             )
             if is_merged_to_main:
-                codebuild = boto3.client('codebuild')
-                codebuild.start_build(
-                    projectName='nextjs-build-deploy',
-                    sourceVersion=payload['after']
-                )
-                print(f"Started build for commit {payload['after'][:7]}")
+                merge_sha = payload['pull_request']['merge_commit_sha']
+                if merge_sha: 
+                    try:
+                        codebuild = boto3.client('codebuild')
+                        codebuild.start_build(
+                            projectName='nextjs-build-deploy',
+                            sourceVersion=merge_sha
+                        )
+                        print(f"Started build for commit {merge_sha[:7]}")
+                    except Exception as e:
+                        print(f"CodeBuild error: {e}")
+                else:
+                    print("No merge commit SHA available")
         elif event_type == "status":
             print(f"Status update: {payload['state']} for {payload['sha'][:7]}")
 
