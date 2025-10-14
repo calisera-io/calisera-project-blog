@@ -11,13 +11,17 @@ heroImage: "/images/blog/high_level_architecture.png"
 
 Calisera is a mobile-first appointment scheduling platform where professionals can create polished booking interfaces for their services directly from their phones.
 
-So how do you architect a system like this? Here's our approach—while not yet complete, it encompasses all elements of the MVP we're building. Our primary objective is creating something solid that leverages current technology and scales effectively. This prioritizes architectural robustness over the rapid iteration and time-to-market concerns typical of conventional MVP methodologies—a deliberate choice for this learning-focused project.
+So how do you architect a system like this? Here's our approach—while not yet complete, it encompasses all elements of the MVP we’re building. Our primary objective is to create something solid that leverages current technology and scales effectively. This means prioritizing architectural robustness over the rapid-iteration mindset typical of conventional MVPs—a deliberate choice for this learning-focused project.
+
+---
 
 ## Why Microservices?
 
-Both of us come from companies that developed monolithic products with low test coverage, and we've experienced firsthand the long-term overhead and struggle this creates — tightly coupled components where failures cascade system-wide, inabilities in scaling specific features independently, lengthy deployment cycles, difficulties onboarding new developers, and an accumulation technical debt that makes refactoring increasingly difficult.
+Both Marcus and I came from monolithic environments with low test coverage and tightly coupled logic. We’ve seen how small changes can ripple through an entire codebase, slowing releases and blocking modernization. Those experiences shaped our decision to go fully modular from day one.
 
-Although microservices systems take longer initially to develop, they offer clear advantages: independent deployment and scaling, technology flexibility per service, isolated failures, clear boundaries for maintainability, and parallel team development. For a learning project focused on building production-grade skills, investing in a microservices architecture from the start provides hands-on experience with patterns that are increasingly standard in modern software development.
+Although microservices take longer to build initially, they offer clear advantages: independent deployment and scaling, isolated failures, technology flexibility per service, and cleaner ownership boundaries. For us, this project isn’t just a product—it’s a playground for learning production-grade patterns used in modern software systems.
+
+---
 
 ## Our High-Level System Architecture
 
@@ -25,48 +29,69 @@ Although microservices systems take longer initially to develop, they offer clea
 
 [View full resolution](https://drive.google.com/file/d/1sqEQkl8l1K7wX3KamJ8nlrT68nuOsaaC/view?usp=sharing)
 
-With this foundation in mind, we designed Calisera around two customer-facing components. First, a mobile application for Android and iPhone enables providers to design profile pages with their service offerings and available timeslots. Second, a web application allows customers to browse and book available slots. Providers generate unique QR codes or URLs to embed in their social media profiles, creating a direct path to their personalized booking pages. While both frontend interfaces share some backend services, they each have distinct access patterns tailored to their specific use cases.
+Calisera has two customer-facing components:  
+- **A mobile app** (Android + iOS) where providers design profile pages, define services, and set availability.  
+- **A web app** where customers browse providers and book appointments.  
 
-### The Backend Services
+Providers generate unique QR codes or URLs to embed in their social media profiles, creating a direct path to their personalized booking pages. Both frontends share backend services but use them differently depending on their roles.
 
-The backend implements a microservices architecture with five specialized services. Here's how they work together:
+---
 
-**User Service** handles authentication and authorization for everyone—providers, customers, and guests. The challenge? Balancing security with a smooth user experience. We need to support multiple OAuth providers (Google, Apple, Facebook) while maintaining full control over our authentication flow and token lifecycle.
+## The Backend Services
 
-Our solution is a Backend-For-Frontend OAuth pattern with token exchange. External providers verify who users are, but then our backend takes over—issuing its own JWT tokens for session management instead of relying on provider tokens. This gives us centralized security policies, custom claims, and complete control over how sessions work across the platform.
+The backend follows a microservices architecture with six independent services, each focused on one responsibility.
 
-**Provider Service** is where providers build their presence. They manage their data, service catalogs, and schedules through unique profile pages. Taking cues from social media, providers can make their services visually engaging with images and aesthetic customization.
+- **User Service** manages authentication and authorization using a secure Backend-for-Frontend (BFF) OAuth pattern. External providers (Google, Apple, Facebook) verify identity, while Calisera issues its own JWTs for centralized control over sessions, refresh logic, and security policies.  
 
-We're building support for three distinct service types to cover different booking scenarios: Simple services for one-on-one appointments, Event services for single-occurrence gatherings with multiple participants, and Class services for recurring group sessions. This structure allows providers to model their actual business offerings while maintaining a consistent booking interface.
+- **Provider & Listing Services** handle provider profiles, service catalogs, and real-time availability. Listing Service calculates which time slots are open by combining provider schedules with existing bookings. It’s stateless and cache-optimized—no redundant data, always fresh availability.  
 
-**Listing Service** does the real-time math. When a customer views a provider's profile page, this service calculates which time slots are actually available for booking. It pulls provider configurations (those three service types) from Provider Service and cross-references them with existing bookings from Booking Service.
+- **Booking Service** will orchestrate reservations—validating time slots, recording reservations, and emitting booking events to keep other services synchronized.  
 
-It's completely stateless with caching. No database of its own—it just computes availability on-demand, ensuring customers always see accurate, real-time availability without us storing redundant data.
+- **Notification Service** will listen for those booking events and send confirmations or cancellations via email, SMS, or push notifications—decoupled and asynchronous.  
 
-**Booking Service** orchestrates the reservation lifecycle, serving as the central coordination point for all appointment operations. When a customer books a time slot, the Booking Service records the reservation and emits events to a message queue—for example, a "booking created" event immediately makes that slot unavailable in future calculations and triggers notification workflows. This event-driven approach keeps dependent systems synchronized without tight coupling.
+- **Analytics Service** will later provide insights for providers through a separate data pipeline, ensuring performance isolation between operational and analytical workloads.
 
-**Notification Service** listens for those booking events and springs into action, sending communications through external SMS, email, and push notification channels. A "booking created" event triggers confirmations, while "booking cancelled" events notify both parties.
+Together, these services form a resilient, event-driven system: one booking action can trigger multiple workflows without tight coupling. If notifications fail, bookings still succeed; if analytics runs late, the user experience remains unaffected.
 
-The beauty of this design? Decoupling. If email delivery is slow or temporarily down, bookings still succeed. Notifications catch up when they can, but the core booking functionality never gets blocked.
+---
 
-**Analytics Service** gives providers insight into their business through a dedicated data pipeline. An ETL process runs on schedule, pulling operational data from our microservice databases, transforming it, and loading it into a Data Warehouse. From there, Analytics Service powers provider dashboards showing booking trends, service performance, customer demographics, and capacity utilization.
+## A Note on Payments
 
-Why the separate warehouse? Analytical queries can be heavy. By keeping them away from our transactional databases, we ensure that someone browsing their stats doesn't slow down a customer trying to book an appointment.
+One deliberate omission: payment processing. Providers handle payments directly outside the platform. This single choice removed a vast layer of complexity—no PCI compliance, refund flows, or gateway integrations—allowing us to focus entirely on a frictionless booking experience for the MVP. Payment integration can come later once the core value is proven.
 
-### A Note on Payments
+---
 
-One deliberate omission: payment processing. Providers collect payments directly from customers outside our platform. This strategic decision significantly reduces complexity—no payment gateway integration, no PCI compliance headaches, no financial transaction management. For this MVP, it lets us focus entirely on perfecting the booking experience itself.
+## Core Architectural Principles
 
-## Architecture Principles and Foundation
+**1. Separation of Concerns**  
+Each service can evolve, deploy, and scale independently. Booking traffic surging? Scale the Booking Service only. Analytics queries growing heavy? Add data-warehouse capacity. Independent movement keeps the system stable and maintainable.
 
-This architecture rests on several key principles that emerged from our design process.
+**2. Event-Driven Communication**  
+Instead of blocking calls, services will publish events (“booking.created”, “booking.cancelled”) that subscribers react to when ready. This asynchronous design improves resilience and makes the system easily extensible—new services can subscribe without changing existing code.
 
-The microservices approach gives us clear separation of concerns. Each service can evolve and scale based on its own needs without forcing changes elsewhere. Need to handle a spike in bookings? Scale up Booking Service. Analytics queries getting heavy? Add Data Warehouse capacity. Everything moves independently.
+**3. Secure Backend-for-Frontend OAuth**  
+Our BFF model stores sensitive OAuth tokens on the server, never in the client, preventing exposure to XSS or token theft. We control token claims, session duration, and revocation policies independently of third-party providers. Security and user experience both benefit.
 
-Event-driven communication—especially between Booking and Notification services—shows how asynchronous design improves resilience. Services don't wait on each other. They publish what happened and move on. Subscribers react when they're ready.
+**4. Strategic Scope Management**  
+Leaving out payments and other secondary features was intentional. Every exclusion created room to refine reliability, traceability, and data flow—skills that matter more for this educational MVP than rapid feature expansion.
 
-Our Backend-For-Frontend OAuth pattern with custom JWT tokens? That gives us complete control over authentication flows and security policies. Critically, it keeps sensitive OAuth tokens from external providers securely stored on our backend, never exposing them to the client where they'd be vulnerable to XSS attacks or token theft. We're not at the mercy of third-party token lifecycles or limitations—we control session duration, refresh logic, and can revoke access independently of the OAuth provider.
+---
 
-And excluding payment processing was a decision not just motivated by reducing complexity—it was about strategic scope management. Every decision to include something is also a decision about where not to spend time and resources. For an educational MVP, this trade-off let us concentrate on building a rock-solid booking system.
+## Where We Are Now
 
-Ultimately, this project is a practical exploration of production-grade architecture patterns. We're balancing scalability requirements with the pragmatic realities of building an educational MVP—one that prioritizes learning and long-term maintainability over shortcuts that would come back to haunt us later.
+Right now, we have the **core of the User Service and Provider Service** working, forming the backbone for authentication and provider management. We’ve also implemented **global timezone handling and availability logic**, ensuring accurate scheduling across different regions.
+
+Next, we’re moving into **frontend development**—bringing the provider mobile app and customer-facing web interface to life—and building out the **Booking and Notification Services** that will power real-time reservations.
+
+The goal isn’t to release fast, but to build a system we fully understand and can scale confidently later. Each service we complete strengthens the foundation for everything that follows.
+
+---
+
+## What’s Next
+
+Our upcoming milestones focus on three things:  
+- Implementing the Booking Service and event-driven notifications  
+- Developing both user interfaces (mobile and web)  
+- Preparing for the Analytics Service and data pipeline  
+
+We’ll continue documenting the process as Calisera evolves—follow along on the Calisera blog or connect with me on LinkedIn to see the system take shape step by step.
