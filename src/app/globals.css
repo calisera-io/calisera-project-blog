@@ -25,7 +25,7 @@ body {
 }
 
 @layer utilities {
-
+  .prose strong,
   .prose-bold strong,
   .prose-headings-medium h1,
   .prose-headings-medium h2,
@@ -33,7 +33,7 @@ body {
   .prose-headings-medium h4,
   .prose-headings-medium h5,
   .prose-headings-medium h6 {
-    font-weight: 500;
+    font-weight: 600;
   }
 
   /* Mobile-first responsive heading sizes */
