@@ -152,7 +152,7 @@ export default function HomePage() {
               choices we make: why we chose our tech stack, how we approached
               major features, what architecture patterns we implemented, and
               which solutions worked (or didn't). These aren't daily
-              logs—they're reflections on the significant development milestones
+              logs — they're reflections on the significant development milestones
               and lessons learned along the way.`)}
             </p>
           </div>
