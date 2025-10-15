@@ -31,7 +31,7 @@ export default function TagsFilter({ tags, activeTagName }: TagsFilterProps) {
         return (
           <li key={tag.name}>
             <Link
-              href={`/blog/${tag.name}`}
+              href={`/blog/${tag.slug}`}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
                 isActive
                   ? "bg-blue-600 text-white border-blue-600"
