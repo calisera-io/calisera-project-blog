@@ -72,9 +72,19 @@ const blogGradients = {
 	],
 };
 
-export default function HomePage() {
+export async function generateStaticParams() {
 	const tags = getAllTags();
-	const { featuredPost, regularPosts } = getOrderedPosts();
+	return tags.map((tag) => ({ tag: tag.slug }));
+}
+
+export default async function BlogTagPage({
+	params,
+}: {
+	params: Promise<{ tag: string }>;
+}) {
+	const { tag } = await params;
+	const { featuredPost, regularPosts } = getOrderedPosts(tag);
+	const tags = getAllTags();
 
 	return (
 		<div className="relative overflow-x-clip">
@@ -86,7 +96,7 @@ export default function HomePage() {
 				<main>
 					<BlogHeader />
 					<nav aria-label="Blog categories" role="navigation">
-						<TagsFilter tags={tags} />
+						<TagsFilter tags={tags} activeTagSlug={tag} />
 					</nav>
 					{featuredPost && (
 						<section aria-labelledby="featured-heading">

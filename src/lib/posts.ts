@@ -1,161 +1,166 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
-import { remark } from 'remark'
-import remarkHtml from 'remark-html'
+import fs from 'fs';
+import matter from 'gray-matter';
+import path from 'path';
+import { remark } from 'remark';
+import remarkHtml from 'remark-html';
 
-const postsDirectory = path.join(process.cwd(), 'content/posts')
+const postsDirectory = path.join(process.cwd(), 'content/posts');
 
 export interface Post {
-  slug: string
-  title: string
-  date: string
-  excerpt: string
-  author?: string
-  tags?: string[]
-  featured?: boolean
-  readTime?: string 
-  contentHtml?: string
-  featuredImages?: string[]
-  heroImage?: string
-  imageAlt?: string
+	slug: string;
+	title: string;
+	date: string;
+	excerpt: string;
+	author?: string;
+	tags?: string[];
+	featured?: boolean;
+	readTime?: string;
+	contentHtml?: string;
+	featuredImages?: string[];
+	heroImage?: string;
+	imageAlt?: string;
 }
 
 export interface Tag {
-  name: string
-  slug: string
-  displayName: string
-  count: number
-}
-
-export interface OrderedPosts {
-  featuredPost: Post | null
-  regularPosts: Post[]
-  totalCount: number
+	name: string;
+	slug: string;
+	count: number;
 }
 
 export function getAllPosts(): Post[] {
-  if (!fs.existsSync(postsDirectory)) {
-    return []
-  }
-  const fileNames = fs.readdirSync(postsDirectory)
-  return fileNames
-    .filter(name => name.endsWith('.md'))
-    .map((name) => {
-      const fullPath = path.join(postsDirectory, name)
-      const fileContents = fs.readFileSync(fullPath, 'utf8')
-      const { data } = matter(fileContents)
-      
-      return {
-        slug: name.replace(/\.md$/, ''),
-        ...data
-      } as Post
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+	if (!fs.existsSync(postsDirectory)) {
+		return [];
+	}
+	const fileNames = fs.readdirSync(postsDirectory);
+	return fileNames
+		.filter((name) => name.endsWith('.md'))
+		.map((name) => {
+			const fullPath = path.join(postsDirectory, name);
+			const fileContents = fs.readFileSync(fullPath, 'utf8');
+			const { data } = matter(fileContents);
+
+			return {
+				slug: name.replace(/\.md$/, ''),
+				...data,
+			} as Post;
+		})
+		.sort(
+			(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+		);
 }
 
 export function getFeaturedPosts(): Post[] {
-  return getAllPosts().filter(post => post.featured)
+	return getAllPosts().filter((post) => post.featured);
 }
 
 export async function getPostBySlug(slug: string): Promise<Post> {
-  const fullPath = path.join(postsDirectory, `${slug}.md`)
-  const fileContents = fs.readFileSync(fullPath, 'utf8')
-  const { data, content } = matter(fileContents)
-  
-  const processedContent = await remark()
-    .use(remarkHtml)
-    .process(content)
-  const contentHtml = processedContent.toString()
-  
-  return {
-    slug,
-    contentHtml,
-    ...data
-  } as Post
+	const fullPath = path.join(postsDirectory, `${slug}.md`);
+	const fileContents = await fs.promises.readFile(fullPath, 'utf8');
+	const { data, content } = matter(fileContents);
+
+	const processedContent = await remark().use(remarkHtml).process(content);
+	const contentHtml = processedContent.toString();
+
+	return {
+		slug,
+		contentHtml,
+		...data,
+	} as Post;
 }
 
+const normalizeTagName = (name: string): string =>
+	name
+		.replace(/[\/\s]+/g, '-')
+		.toLowerCase()
+		.trim();
+
 export function getAllTags(): Tag[] {
-  const allPosts = getAllPosts()
-  const tagCounts = new Map<string, number>()
-  
-  allPosts.forEach(post => {
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach(tag => {
-        const normalizedTag = tag.toLowerCase().trim()
-        tagCounts.set(normalizedTag, (tagCounts.get(normalizedTag) || 0) + 1)
-      })
-    }
-  })
-  
-  return Array.from(tagCounts.entries())
-    .map(([tagName, count]) => ({
-      name: tagName,
-      slug: tagName.replace(/\s+/g, '_').replace(/\/+/g, '-').toLowerCase(),
-      displayName: tagName.split('-').map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' '),
-      count
-    }))
-    .sort((a, b) => b.count - a.count)
+	const tagCountsMap: Record<string, Tag> = {};
+
+	for (const post of getAllPosts()) {
+		if (!post.tags) continue;
+
+		for (const name of post.tags) {
+			if (!name) continue;
+
+			const slug = normalizeTagName(name);
+
+			const existing = tagCountsMap[slug];
+
+			if (existing) {
+				if (existing.name !== name) {
+					throw new Error(`Mistyped tag name: ${name}`);
+				}
+				existing.count += 1;
+			} else {
+				tagCountsMap[slug] = {
+					name,
+					slug,
+					count: 1,
+				};
+			}
+		}
+	}
+
+	return Object.values(tagCountsMap).sort((a, b) => b.count - a.count);
 }
 
 export function getPostsByTag(targetTag: string): Post[] {
-  const allPosts = getAllPosts()
-  // Decode and convert dashes back to spaces for matching
-  const decodedTargetTag = targetTag.replace(/_/g, ' ').replace(/-/g, '/').toLowerCase().trim()
-  
-  return allPosts.filter(post => 
-    post.tags && 
-    Array.isArray(post.tags) && 
-    post.tags.some(tag => tag.toLowerCase().trim() === decodedTargetTag)
-  )
+	return getAllPosts().filter((post) =>
+		post.tags?.some((tag) => normalizeTagName(tag) == targetTag),
+	);
 }
 
-export function getOrderedPosts(tagFilter?: string): OrderedPosts {
-  // Get base data
-  const allPosts = getAllPosts()
-  const featuredPosts = getFeaturedPosts()
-  
-  // No tag filter - simple case
-  if (!tagFilter) {
-    return {
-      featuredPost: featuredPosts[0] || null,
-      regularPosts: allPosts.filter(post => !post.featured),
-      totalCount: allPosts.length
-    }
-  }
-  
-  // Tag filter - get posts with tag
-  const taggedPosts = getPostsByTag(tagFilter)
-  const sortedTaggedPosts = [...taggedPosts].sort((a, b) => 
-    new Date(b.date).getTime() - new Date(a.date).getTime()
-  )
-  
-  // Find featured post with this tag
-  const featuredWithTag = featuredPosts.find(post => 
-    hasTag(post, tagFilter)
-  )
-  
-  // Determine featured post
-  const featuredPost = featuredWithTag || sortedTaggedPosts[0] || null
-  
-  // Get regular posts (everything except the featured one)
-  const regularPosts = sortedTaggedPosts.filter(post => 
-    post.slug !== featuredPost?.slug
-  )
-  
-  return {
-    featuredPost,
-    regularPosts,
-    totalCount: taggedPosts.length
-  }
+export function getOrderedPosts(tagFilter?: string): {
+	featuredPost: Post | null;
+	regularPosts: Post[];
+	totalCount: number;
+} {
+	// Get base data
+	const allPosts = getAllPosts();
+	const featuredPosts = getFeaturedPosts();
+
+	// No tag filter - simple case
+	if (!tagFilter) {
+		return {
+			featuredPost: featuredPosts[0] || null,
+			regularPosts: allPosts.filter((post) => !post.featured),
+			totalCount: allPosts.length,
+		};
+	}
+
+	// Tag filter - get posts with tag
+	const taggedPosts = getPostsByTag(tagFilter);
+	const sortedTaggedPosts = [...taggedPosts].sort(
+		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+	);
+
+	// Find featured post with this tag
+	const featuredWithTag = featuredPosts.find((post) =>
+		hasTag(post, tagFilter),
+	);
+
+	// Determine featured post
+	const featuredPost = featuredWithTag || sortedTaggedPosts[0] || null;
+
+	// Get regular posts (everything except the featured one)
+	const regularPosts = sortedTaggedPosts.filter(
+		(post) => post.slug !== featuredPost?.slug,
+	);
+
+	return {
+		featuredPost,
+		regularPosts,
+		totalCount: taggedPosts.length,
+	};
 }
 
 // Helper function to check if post has tag
 function hasTag(post: Post, targetTag: string): boolean {
-  return post.tags?.some(tag => 
-    tag.toLowerCase().trim() === targetTag.toLowerCase().trim()
-  ) ?? false
+	return (
+		post.tags?.some(
+			(tag) =>
+				tag.toLowerCase().trim() === targetTag.toLowerCase().trim(),
+		) ?? false
+	);
 }
-

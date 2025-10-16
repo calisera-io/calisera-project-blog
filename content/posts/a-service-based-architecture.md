@@ -4,7 +4,7 @@ date: "2025-10-15"
 excerpt: "How we architected Calisera, a mobile-first appointment scheduling platform, using service-based architecture to balance scalability with the pragmatic realities of building an MVP."
 author: "Sabine & Marcus"
 featured: true
-tags: ["featured", "service-based-architecture", "architecture", "booking-system", "mvp", "scalability"]
+tags: ["Service Based Architecture", "Architecture", "Booking System", "MVP", "Scalability"]
 featuredImages: ["/images/blog/high_level_architecture.png"]
 heroImage: "/images/blog/high_level_architecture.png"
 ---

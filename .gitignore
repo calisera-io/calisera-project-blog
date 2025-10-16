@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# lambda dependencies
+/**/node_modules
+
 # testing
 /coverage
 

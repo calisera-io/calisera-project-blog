@@ -3,7 +3,7 @@ title: "How This Blog is Deployed: A Simple CI/CD Pipeline"
 date: "2025-01-15"
 excerpt: "A deep dive into the automated deployment pipeline that powers this blog, from GitHub Actions to AWS S3 static hosting."
 author: "Marcus"
-tags: ["featured", "DevOps", "CI/CD", "AWS", "GitHub Actions", "Next.js"]
+tags: ["DevOps", "CI/CD", "AWS", "GitHub Actions", "Next.js"]
 ---
 
 This blog runs on a fully automated deployment pipeline that exemplifies modern DevOps practices. Every time code is merged to the main branch, it automatically builds and deploys to production within minutes. Here's how it works.
