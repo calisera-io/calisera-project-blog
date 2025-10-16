@@ -1,12 +1,19 @@
 ---
-title: "Designing a Scalable Booking System: A Service-Based Architecture"
-date: "2025-10-15"
-excerpt: "How we architected Calisera, a mobile-first appointment scheduling platform, using service-based architecture to balance scalability with the pragmatic realities of building an MVP."
-author: "Sabine & Marcus"
+title: 'Designing a Scalable Booking System: A Service-Based Architecture'
+date: '2025-10-15'
+excerpt: 'How we architected Calisera, a mobile-first appointment scheduling platform, using service-based architecture to balance scalability with the pragmatic realities of building an MVP.'
+authors: ['Sabine', 'Marcus']
 featured: true
-tags: ["Service Based Architecture", "Architecture", "Booking System", "MVP", "Scalability"]
-featuredImages: ["/images/blog/high_level_architecture.png"]
-heroImage: "/images/blog/high_level_architecture.png"
+tags:
+    [
+        'Service Based Architecture',
+        'Architecture',
+        'Booking System',
+        'MVP',
+        'Scalability',
+    ]
+featuredImages: ['/images/blog/high_level_architecture.png']
+heroImage: '/images/blog/high_level_architecture.png'
 ---
 
 Calisera is a mobile-first appointment scheduling platform where professionals can create polished booking interfaces for their services directly from their phones.
@@ -29,9 +36,10 @@ Service-based architecture strikes the right balance for our needs: it provides 
 
 [View full resolution](https://drive.google.com/file/d/1sqEQkl8l1K7wX3KamJ8nlrT68nuOsaaC/view?usp=sharing)
 
-Calisera has two customer-facing components:  
-- **A mobile app** (Android + iOS) where providers design profile pages, define services, and set availability.  
-- **A web app** where customers browse providers and book appointments.  
+Calisera has two customer-facing components:
+
+-   **A mobile app** (Android + iOS) where providers design profile pages, define services, and set availability.
+-   **A web app** where customers browse providers and book appointments.
 
 Providers generate unique QR codes or URLs to embed in their social media profiles, creating a direct path to their personalized booking pages. Both frontends share backend services but use them differently depending on their roles.
 
@@ -41,21 +49,21 @@ Providers generate unique QR codes or URLs to embed in their social media profil
 
 The backend follows a service-based architecture with independent services, each focused on a single responsibility using a shared database with logical separation for simplified data management. Here's how they work together:
 
-- **User Service** manages authentication and authorization using a secure Backend-for-Frontend OAuth pattern. External providers verify identity, while Calisera issues its own tokens for centralized control over sessions, refresh logic, and security policies.  
+-   **User Service** manages authentication and authorization using a secure Backend-for-Frontend OAuth pattern. External providers verify identity, while Calisera issues its own tokens for centralized control over sessions, refresh logic, and security policies.
 
-- **Provider Service** is where providers build their presence, handles provider profiles, service catalogs, and schedules.   
+-   **Provider Service** is where providers build their presence, handles provider profiles, service catalogs, and schedules.
 
     We're building support for three distinct service types to cover different booking scenarios: Simple services for one-on-one appointments, Event services for single-occurrence gatherings with multiple participants, and Class services for recurring group sessions. This structure allows providers to model their actual business offerings while maintaining a consistent booking interface.
 
-- **Booking Service** orchestrates the reservation lifecycle, serving as the central coordination point for all appointment operations. When a customer books a time slot, the Booking Service records the reservation and emits events to a message queue  —  for example, a "booking created" event immediately makes that slot unavailable in future calculations and triggers notification workflows. This event-driven approach keeps dependent systems synchronized without tight coupling. 
+-   **Booking Service** orchestrates the reservation lifecycle, serving as the central coordination point for all appointment operations. When a customer books a time slot, the Booking Service records the reservation and emits events to a message queue — for example, a "booking created" event immediately makes that slot unavailable in future calculations and triggers notification workflows. This event-driven approach keeps dependent systems synchronized without tight coupling.
 
-- **Listing Service** does the real-time math. When a customer views a provider's profile page, this service calculates which time slots are actually available for booking. It pulls provider configurations from Provider Service and cross-references them with existing bookings from Booking Service.
+-   **Listing Service** does the real-time math. When a customer views a provider's profile page, this service calculates which time slots are actually available for booking. It pulls provider configurations from Provider Service and cross-references them with existing bookings from Booking Service.
 
     It's completely stateless with caching. No database of its own — it just computes availability on-demand, ensuring customers always see accurate, real-time availability without us storing redundant data.
 
-- **Notification Service** listens for booking events and sends confirmations or cancellations via email, SMS, or push notifications — decoupled but sharing the same data store for consistency.  
+-   **Notification Service** listens for booking events and sends confirmations or cancellations via email, SMS, or push notifications — decoupled but sharing the same data store for consistency.
 
-- **Analytics Service** gives providers insight into their business through an event-driven pipeline. It subscribes to business events from the event queue (bookings, completions, cancellations), processes them, and stores aggregated insights. This powers provider dashboards showing booking trends, service performance, customer demographics, and capacity utilization. 
+-   **Analytics Service** gives providers insight into their business through an event-driven pipeline. It subscribes to business events from the event queue (bookings, completions, cancellations), processes them, and stores aggregated insights. This powers provider dashboards showing booking trends, service performance, customer demographics, and capacity utilization.
 
 ---
 
@@ -66,7 +74,6 @@ One deliberate omission: payment processing. Providers handle payments directly 
 ---
 
 ## Core Architectural Principles (and Honest Trade-offs)
-
 
 **1. Modularity & Evolvability: Service Separation with Shared Database**  
 Let's be clear: we're inspired by microservices — their scalability and modularity are appealing — but we had to keep costs down and deployment as simple as possible while still refraining from building a monolith. Our design is service-based and domain-driven: each service owns its domain logic and data tables within a shared database, following bounded context principles.
@@ -83,5 +90,6 @@ Key services — Booking, Notification, and Analytics — communicate through ev
 
 The catch? Eventual consistency means you need to think harder about race conditions and ordering. Debugging "why didn't this notification send?" across async events is trickier than tracing a direct function call. We accepted this complexity as a deliberate trade-off for resilience.
 
-## The Reality Check  
+## The Reality Check
+
 This architecture prioritizes getting to market over production-grade scale. The shared database limits our ability to scale services independently, and our event system needs more maturity before it's truly resilient. But we've built something **modular**, **testable**, and **evolvable** — which means when we do need to scale, we'll know exactly where to refactor. And if the MVP doesn't find traction? We haven't blown our budget on over-engineered infrastructure that nobody needs.
