@@ -7,8 +7,6 @@ featured: true
 tags: ["featured", "DevOps", "CI/CD", "AWS", "GitHub Actions", "Next.js"]
 ---
 
-# How This Blog is Deployed: A Simple CI/CD Pipeline
-
 This blog runs on a fully automated deployment pipeline that exemplifies modern DevOps practices. Every time code is merged to the main branch, it automatically builds and deploys to production within minutes. Here's how it works.
 
 ## Architecture Overview
