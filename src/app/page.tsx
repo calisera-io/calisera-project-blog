@@ -133,7 +133,7 @@ export default function HomePage() {
             >
               Building the appointment booking app for Instagram professionals
             </h1>
-            <p className="text-lg text-[#404551] dark:text-gray-300 max-w-3xl mb-8">
+            <p className="text-lg text-[#404551] dark:text-gray-300 max-w-5xl mb-8">
               <strong className="text-medium">
                 Calisera is our hands-on learning project.
               </strong>{' '}
@@ -144,7 +144,7 @@ export default function HomePage() {
               technical challenges: mobile-first design, social platform
               integration, and real-time scheduling systems.`)}
             </p>
-            <p className="text-lg text-[#404551] dark:text-gray-300 max-w-3xl">
+            <p className="text-lg text-[#404551] dark:text-gray-300 max-w-5xl">
               <strong className="text-medium">
                 This blog documents our key product decisions.
               </strong>{' '}
@@ -279,14 +279,14 @@ export default function HomePage() {
             Meet the Team
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <article className="rounded-[32px] border border-[#E4E4E4] dark:border-[#404551] bg-white dark:bg-[#111827] p-6 md:p-8 text-left shadow-none transition-shadow hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]">
+          <div className="flex flex-wrap justify-center gap-8">
+            <article className="flex-1 min-w-[320px] max-w-[460px] rounded-[32px] border border-[#E4E4E4] dark:border-[#404551] bg-white dark:bg-[#111827] p-6 md:p-8 text-left shadow-none transition-shadow hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]">
               <Image
-                src="https://picsum.photos/800/400"
+                src="/images/people/marcus_anime_cropped2.png"
                 alt="Marcus, Tech Lead"
-                width={600}
-                height={400}
-                className="w-full h-48 md:h-64 mb-6 rounded-2xl object-cover"
+                width={240}
+                height={542}
+                className="w-[calc(100%-4rem)] h-52 md:h-78 mb-6 rounded-2xl object-cover object-center mx-auto"
               />
               <h3 className="text-2xl text-center font-medium mb-2 text-gray-900 dark:text-white">
                 Marcus
@@ -296,27 +296,27 @@ export default function HomePage() {
               <p className="text-gray-600 dark:text-gray-300">
                 {(`Marcus is Calisera's Lead Developer with over 20 years of
                 experience. He drives technical decision-making and has
-                architected our secure microservice infrastructure, ensuring
+                architected our secure infrastructure, ensuring
                 Calisera delivers exceptional performance on a scalable, secure
                 foundation.`)}
               </p>
             </article>
 
-            <article className="rounded-[32px] border border-[#E4E4E4] dark:border-[#404551] bg-white dark:bg-[#111827] p-6 md:p-8 text-left shadow-none transition-shadow hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]">
+            <article className="flex-1 min-w-[320px] max-w-[460px] rounded-[32px] border border-[#E4E4E4] dark:border-[#404551] bg-white dark:bg-[#111827] p-6 md:p-8 text-left shadow-none transition-shadow hover:shadow-[0_6px_24px_rgba(0,0,0,0.06)]">
               <Image
-                src="https://picsum.photos/800/400"
+                src="/images/people/sab_anime_grey_cropped.png"
                 alt="Sabine, Developer and Project Manager"
                 width={600}
                 height={400}
-                className="w-full h-48 md:h-64 mb-6 rounded-2xl object-cover"
+                className="w-[calc(100%-4rem)] h-52 md:h-78 mb-6 rounded-2xl object-cover object-center mx-auto"
               />
               <h3 className="text-2xl text-center font-medium mb-2 text-gray-900 dark:text-white">
                 Sabine
                 <br />
-                Developer & Project Manager
+                Developer & Product Owner
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Sabine is a full-stack developer with a passion for exceptional
+                Sabine is a full-stack developer with a passion for
                 design. Working across the entire product, she not only builds
                 beautiful, functional experiences but also drives projects
                 forward through strategic planning turning vision into reality.

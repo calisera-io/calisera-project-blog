@@ -14,8 +14,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <article>
-        <header className="max-w-4xl">
-          <h1 className="text-[42px] md:text-[64px] font-medium mb-4 text-[#111827] dark:text-white leading-[1.1] md:leading-[1.06]">{post.title}</h1>
+        <header className="max-w-7xl">
+          <h1 className="text-[36px] md:text-[52px] font-bold mb-4 text-[#111827] dark:text-white leading-[1.2] md:leading-[1.25]">{post.title}</h1>
           <div className="text-gray-600">
             <span>{post.date}</span>
             {post.author && <span className="ml-4">by {post.author}</span>}
