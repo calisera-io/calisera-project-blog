@@ -3,7 +3,7 @@ import { CoreFeaturesGrid } from './core-features-grid';
 import { FeaturedPostCard } from './featured-post-card';
 import { Footer } from './footer';
 import { GradientBackground } from './gradient-background';
-import { Header } from './header';
+import { Header } from './headerx';
 import { RegularPostCard } from './regular-post-card';
 import { TagsFilter } from './tags-filter';
 
