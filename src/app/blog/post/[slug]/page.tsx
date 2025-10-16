@@ -1,4 +1,4 @@
-import { getAllPosts, getPostBySlug } from '../../../../lib/posts'
+import { getAllPosts, getPostBySlug } from '@/lib/posts'
 import GradientBackground from '@/components/GradientBackground'
 
 const postGradients = {
@@ -50,7 +50,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           className="prose-tight-spacing prose prose-lg prose-headings-medium prose-responsive prose-bold max-w-none my-16 [&_img]:rounded-xl md:[&_img]:max-w-2/3"
           dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }}
         />
-        <CommentForm postId={slug} />
       </article>
       </div>
     </div>
