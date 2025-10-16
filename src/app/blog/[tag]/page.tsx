@@ -82,9 +82,6 @@ export default async function BlogTagPage({ params }: { params: Promise<{ tag: s
   const { featuredPost, regularPosts } = getOrderedPosts(tag);
   const tags = getAllTags();
 
-  // Find the active tag by matching the slug
-  const activeTag = tags.find(t => t.slug === tag);
-
   return (
     <div className="relative overflow-x-clip">
         <GradientBackground lightOrbs={blogGradients.light} darkOrbs={blogGradients.dark} />
@@ -92,7 +89,7 @@ export default async function BlogTagPage({ params }: { params: Promise<{ tag: s
             <main>
               <BlogHeader />
               <nav aria-label="Blog categories" role="navigation">
-                <TagsFilter tags={tags} activeTagName={activeTag?.name} />
+                <TagsFilter tags={tags} activeTagSlug={tag} />
               </nav>
               {featuredPost && (
                 <section aria-labelledby="featured-heading">

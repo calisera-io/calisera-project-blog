@@ -14,17 +14,17 @@ export default function Header() {
           
           {/* Navigation */}
           <nav className="flex space-x-8">
-            <Link 
-              href="/" 
-              className="text-black px-3 py-2 text-sm transition-colors duration-150 text-black/70 hover:text-black dark:text-gray-300 dark:hover:text-white"
-            >
-              Project
-            </Link>
-            <Link 
-              href="/blog" 
+            <Link
+              href="/"
               className="text-black px-3 py-2 text-sm transition-colors duration-150 text-black/70 hover:text-black dark:text-gray-300 dark:hover:text-white"
             >
               Blog
+            </Link>
+            <Link
+              href="/about"
+              className="text-black px-3 py-2 text-sm transition-colors duration-150 text-black/70 hover:text-black dark:text-gray-300 dark:hover:text-white"
+            >
+              About
             </Link>
           </nav>
         </div>

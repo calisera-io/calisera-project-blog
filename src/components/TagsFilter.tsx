@@ -3,10 +3,10 @@ import { Tag } from '@/lib/posts';
 
 interface TagsFilterProps {
   tags: Tag[];
-  activeTagName?: string;
+  activeTagSlug?: string;
 }
 
-export default function TagsFilter({ tags, activeTagName }: TagsFilterProps) {
+export default function TagsFilter({ tags, activeTagSlug }: TagsFilterProps) {
   return (
     <ul
       className="flex flex-wrap gap-x-3 gap-y-3 mt-6 mb-10"
@@ -15,9 +15,9 @@ export default function TagsFilter({ tags, activeTagName }: TagsFilterProps) {
     >
       <li>
         <Link
-          href="/blog"
+          href="/"
           className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-            !activeTagName
+            !activeTagSlug
               ? "bg-cyan-400/50 text-gray-800 border-cyan-400/50"
               : "text-gray-700 dark:text-gray-300 border-gray-300 hover:bg-cyan-200/30 dark:hover:bg-gray-800"
           }`}
@@ -27,7 +27,7 @@ export default function TagsFilter({ tags, activeTagName }: TagsFilterProps) {
       </li>
 
       {tags.map((tag) => {
-        const isActive = tag.name === activeTagName;
+        const isActive = tag.slug === activeTagSlug;
         return (
           <li key={tag.name}>
             <Link
