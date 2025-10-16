@@ -91,8 +91,8 @@ export function getAllTags(): Tag[] {
   return Array.from(tagCounts.entries())
     .map(([tagName, count]) => ({
       name: tagName,
-      slug: encodeURIComponent(tagName.replace(/\s+/g, '-').toLowerCase()),
-      displayName: tagName.split('-').map(word => 
+      slug: tagName.replace(/\s+/g, '_').replace(/\/+/g, '-').toLowerCase(),
+      displayName: tagName.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' '),
       count
@@ -103,7 +103,7 @@ export function getAllTags(): Tag[] {
 export function getPostsByTag(targetTag: string): Post[] {
   const allPosts = getAllPosts()
   // Decode and convert dashes back to spaces for matching
-  const decodedTargetTag = decodeURIComponent(targetTag).replace(/-/g, ' ').toLowerCase().trim()
+  const decodedTargetTag = targetTag.replace(/_/g, ' ').replace(/-/g, '/').toLowerCase().trim()
   
   return allPosts.filter(post => 
     post.tags && 

@@ -38,11 +38,11 @@ body {
 
   /* Mobile-first responsive heading sizes */
   .prose-responsive h1 {
-    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+    @apply text-3xl md:text-5xl lg:text-7xl xl:text-6xl font-bold;
   }
 
   .prose-responsive h2 {
-    @apply text-xl md:text-2xl lg:text-3xl xl:text-3xl;
+    @apply text-xl md:text-2xl lg:text-3xl xl:text-3xl font-bold;
   }
 
   .prose-responsive h3 {

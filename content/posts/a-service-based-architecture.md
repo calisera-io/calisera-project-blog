@@ -67,6 +67,7 @@ One deliberate omission: payment processing. Providers handle payments directly 
 
 ## Core Architectural Principles (and Honest Trade-offs)
 
+
 **1. Modularity & Evolvability: Service Separation with Shared Database**  
 Let's be clear: we're inspired by microservices — their scalability and modularity are appealing — but we had to keep costs down and deployment as simple as possible while still refraining from building a monolith. Our design is service-based and domain-driven: each service owns its domain logic and data tables within a shared database, following bounded context principles.
 

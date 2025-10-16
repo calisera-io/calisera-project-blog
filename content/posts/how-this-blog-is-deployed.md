@@ -3,7 +3,6 @@ title: "How This Blog is Deployed: A Simple CI/CD Pipeline"
 date: "2025-01-15"
 excerpt: "A deep dive into the automated deployment pipeline that powers this blog, from GitHub Actions to AWS S3 static hosting."
 author: "Marcus"
-featured: true
 tags: ["featured", "DevOps", "CI/CD", "AWS", "GitHub Actions", "Next.js"]
 ---
 

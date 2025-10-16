@@ -6,7 +6,7 @@ export default function BlogHeader() {
       </h1>
       <p className="text-[18px] text-[#404551] font-regular dark:text-gray-300 max-w-3xl mb-8 leading-relaxed">
         From user interviews to MVP—showcasing product management insights,
-        development decisions, and technical architecture behind our appointment
+        development decisions, user interface design and technical architecture behind our appointment
         booking app.
       </p>
     </div>
