@@ -74,28 +74,38 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   } as Post
 }
 
-const normalizeTagName = (tagName: string): string => tagName.replace(/[\/\s]+/g, '-').toLowerCase().trim();
+const normalizeTagName = (name: string): string =>
+  name.replace(/[\/\s]+/g, '-').toLowerCase().trim();
 
 export function getAllTags(): Tag[] {
-  return getAllPosts()
-    .flatMap(post => post.tags)
-    .reduce<Tag[]>((acc, tagName) => {
-      if (!tagName) return acc;
-      const normalizedTag = normalizeTagName(tagName);
-      const existing = acc.find(t => t.slug === normalizedTag);
+  const tagCountsMap: Record<string, Tag> = {};
+
+  for (const post of getAllPosts()) {
+    if (!post.tags) continue;
+
+    for (const name of post.tags) {
+      if (!name) continue;
+
+      const slug = normalizeTagName(name);
+
+      const existing = tagCountsMap[slug];
+
       if (existing) {
-        if (existing.name != tagName) throw new Error(`Misspelled tag name: ${tagName}`);
+        if (existing.name !== name) {
+          throw new Error(`Mistyped tag name: ${name}`);
+        }
         existing.count += 1;
       } else {
-        acc.push({ 
-          name: tagName, 
-          slug: normalizedTag, 
+        tagCountsMap[slug] = { 
+          name, 
+          slug, 
           count: 1 
-        });
+        };
       }
-      return acc;
-    }, [])
-    .sort((a, b) => b.count - a.count);
+    }
+  }
+
+  return Object.values(tagCountsMap).sort((a, b) => b.count - a.count);
 }
 
 export function getPostsByTag(targetTag: string): Post[] {
