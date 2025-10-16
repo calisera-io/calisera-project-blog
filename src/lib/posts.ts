@@ -24,7 +24,6 @@ export interface Post {
 export interface Tag {
   name: string
   slug: string
-  displayName: string
   count: number
 }
 
@@ -75,40 +74,33 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   } as Post
 }
 
+const normalizeTagName = (tagName: string): string => tagName.replace(/[\/\s]+/g, '-').toLowerCase().trim();
+
 export function getAllTags(): Tag[] {
-  const allPosts = getAllPosts()
-  const tagCounts = new Map<string, number>()
-  
-  allPosts.forEach(post => {
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach(tag => {
-        const normalizedTag = tag.toLowerCase().trim()
-        tagCounts.set(normalizedTag, (tagCounts.get(normalizedTag) || 0) + 1)
-      })
-    }
-  })
-  
-  return Array.from(tagCounts.entries())
-    .map(([tagName, count]) => ({
-      name: tagName,
-      slug: tagName.replace(/\s+/g, '_').replace(/\/+/g, '-').toLowerCase(),
-      displayName: tagName.split('-').map(word =>
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' '),
-      count
-    }))
-    .sort((a, b) => b.count - a.count)
+  return getAllPosts()
+    .flatMap(post => post.tags)
+    .reduce<Tag[]>((acc, tagName) => {
+      if (!tagName) return acc;
+      const normalizedTag = normalizeTagName(tagName);
+      const existing = acc.find(t => t.slug === normalizedTag);
+      if (existing) {
+        if (existing.name != tagName) throw new Error(`Misspelled tag name: ${tagName}`);
+        existing.count += 1;
+      } else {
+        acc.push({ 
+          name: tagName, 
+          slug: normalizedTag, 
+          count: 1 
+        });
+      }
+      return acc;
+    }, [])
+    .sort((a, b) => b.count - a.count);
 }
 
 export function getPostsByTag(targetTag: string): Post[] {
-  const allPosts = getAllPosts()
-  // Decode and convert dashes back to spaces for matching
-  const decodedTargetTag = targetTag.replace(/_/g, ' ').replace(/-/g, '/').toLowerCase().trim()
-  
-  return allPosts.filter(post => 
-    post.tags && 
-    Array.isArray(post.tags) && 
-    post.tags.some(tag => tag.toLowerCase().trim() === decodedTargetTag)
+  return getAllPosts().filter(post => 
+      post.tags?.some(tag => normalizeTagName(tag) == targetTag)
   )
 }
 

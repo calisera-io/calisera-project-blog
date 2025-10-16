@@ -1,5 +1,6 @@
-import { getAllPosts, getPostBySlug } from '@/lib/posts'
+import { getAllPosts, getAllTags, getPostBySlug } from '@/lib/posts'
 import GradientBackground from '@/components/GradientBackground'
+import TagsFilter from '@/components/TagsFilter';
 
 const postGradients = {
   light: [
@@ -24,7 +25,7 @@ export async function generateStaticParams() {
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const post = await getPostBySlug(slug)
-
+  const tags = getAllTags().filter(tag => post.tags?.includes(tag.name));
   return (
     <div className="relative overflow-x-clip">
       <GradientBackground lightOrbs={postGradients.light} darkOrbs={postGradients.dark} />
@@ -36,15 +37,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <span>{post.date}</span>
             {post.author && <span className="ml-4">by {post.author}</span>}
           </div>
-          {post.tags && (
-            <div className="mt-4 flex flex-wrap gap-3">
-              {post.tags.map((tag: string) => (
-                <span key={tag} className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
+          <nav aria-label="Blog categories" role="navigation">
+            <TagsFilter tags={tags} all={false}/>
+          </nav>
         </header>
         <div
           className="prose-tight-spacing prose prose-lg prose-headings-medium prose-responsive prose-bold max-w-none my-16 [&_img]:rounded-xl md:[&_img]:max-w-2/3"
