@@ -1,9 +1,9 @@
 import { BlogHeader } from './blog-header';
 import { CoreFeaturesGrid } from './core-features-grid';
 import { FeaturedPostCard } from './featured-post-card';
-import { Footer } from './footerx';
+import { Footer } from './footer';
 import { GradientBackground } from './gradient-background';
-import { Header } from './headerx';
+import { Header } from './header';
 import { RegularPostCard } from './regular-post-card';
 import { TagsFilter } from './tags-filter';
 
