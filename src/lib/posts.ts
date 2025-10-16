@@ -91,7 +91,7 @@ export function getAllTags(): Tag[] {
   return Array.from(tagCounts.entries())
     .map(([tagName, count]) => ({
       name: tagName,
-      slug: tagName.replace(/\s+/g, '-').replace(/\//g, '-').toLowerCase(),
+      slug: encodeURIComponent(tagName.replace(/\s+/g, '-').toLowerCase()),
       displayName: tagName.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' '),
