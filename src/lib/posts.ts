@@ -11,7 +11,7 @@ export interface Post {
 	title: string;
 	date: string;
 	excerpt: string;
-	author?: string;
+	authors: string[];
 	tags?: string[];
 	featured?: boolean;
 	readTime?: string;
@@ -116,11 +116,9 @@ export function getOrderedPosts(tagFilter?: string): {
 	regularPosts: Post[];
 	totalCount: number;
 } {
-	// Get base data
 	const allPosts = getAllPosts();
 	const featuredPosts = getFeaturedPosts();
 
-	// No tag filter - simple case
 	if (!tagFilter) {
 		return {
 			featuredPost: featuredPosts[0] || null,
@@ -129,21 +127,17 @@ export function getOrderedPosts(tagFilter?: string): {
 		};
 	}
 
-	// Tag filter - get posts with tag
 	const taggedPosts = getPostsByTag(tagFilter);
 	const sortedTaggedPosts = [...taggedPosts].sort(
 		(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
 	);
 
-	// Find featured post with this tag
 	const featuredWithTag = featuredPosts.find((post) =>
 		hasTag(post, tagFilter),
 	);
 
-	// Determine featured post
 	const featuredPost = featuredWithTag || sortedTaggedPosts[0] || null;
 
-	// Get regular posts (everything except the featured one)
 	const regularPosts = sortedTaggedPosts.filter(
 		(post) => post.slug !== featuredPost?.slug,
 	);
@@ -155,7 +149,6 @@ export function getOrderedPosts(tagFilter?: string): {
 	};
 }
 
-// Helper function to check if post has tag
 function hasTag(post: Post, targetTag: string): boolean {
 	return (
 		post.tags?.some(

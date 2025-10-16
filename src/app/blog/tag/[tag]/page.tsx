@@ -1,8 +1,11 @@
-import BlogHeader from '@/components/BlogHeader';
-import FeaturedPostCard from '@/components/FeaturedPostCard';
-import GradientBackground from '@/components/GradientBackground';
-import RegularPostCard from '@/components/RegularPostCard';
-import { TagsFilter } from '@/components/tags-filter';
+import {
+	BlogHeader,
+	FeaturedPostCard,
+	GradientBackground,
+	RegularPostCard,
+	TagsFilter,
+} from '@/components';
+
 import { getAllTags, getOrderedPosts } from '@/lib/posts';
 
 const blogGradients = {

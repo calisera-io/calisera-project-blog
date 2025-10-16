@@ -1,5 +1,5 @@
-import GradientBackground from '@/components/GradientBackground';
-import { TagsFilter } from '@/components/tags-filter';
+import { GradientBackground, TagsFilter } from '@/components';
+import { joinWithAnd } from '@/lib/authors';
 import { getAllPosts, getAllTags, getPostBySlug } from '@/lib/posts';
 
 const postGradients = {
@@ -98,8 +98,10 @@ export default async function PostPage({
 						</h1>
 						<div className="text-gray-600">
 							<span>{post.date}</span>
-							{post.author && (
-								<span className="ml-4">by {post.author}</span>
+							{post.authors && post.authors.length > 0 && (
+								<span className="ml-4">
+									by {joinWithAnd(post.authors)}
+								</span>
 							)}
 						</div>
 						<nav aria-label="Blog categories" role="navigation">
