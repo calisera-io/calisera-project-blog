@@ -74,7 +74,7 @@ const blogGradients = {
 
 export async function generateStaticParams() {
   const tags = getAllTags();
-  return tags.map(tag => ({ tag: tag.name }));
+  return tags.map(tag => ({ tag: tag.slug }));
 }
 
 export default async function BlogTagPage({ params }: { params: Promise<{ tag: string }> }) {
@@ -89,7 +89,7 @@ export default async function BlogTagPage({ params }: { params: Promise<{ tag: s
             <main>
               <BlogHeader />
               <nav aria-label="Blog categories" role="navigation">
-                <TagsFilter tags={tags} />
+                <TagsFilter tags={tags} activeTagSlug={tag} />
               </nav>
               {featuredPost && (
                 <section aria-labelledby="featured-heading">
