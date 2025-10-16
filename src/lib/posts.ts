@@ -27,12 +27,6 @@ export interface Tag {
 	count: number;
 }
 
-export interface OrderedPosts {
-	featuredPost: Post | null;
-	regularPosts: Post[];
-	totalCount: number;
-}
-
 export function getAllPosts(): Post[] {
 	if (!fs.existsSync(postsDirectory)) {
 		return [];
@@ -117,7 +111,11 @@ export function getPostsByTag(targetTag: string): Post[] {
 	);
 }
 
-export function getOrderedPosts(tagFilter?: string): OrderedPosts {
+export function getOrderedPosts(tagFilter?: string): {
+	featuredPost: Post | null;
+	regularPosts: Post[];
+	totalCount: number;
+} {
 	// Get base data
 	const allPosts = getAllPosts();
 	const featuredPosts = getFeaturedPosts();
