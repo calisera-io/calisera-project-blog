@@ -74,7 +74,7 @@ const blogGradients = {
 
 export async function generateStaticParams() {
   const tags = getAllTags();
-  return tags.map(tag => ({ tag: tag.name }));
+  return tags.map(tag => ({ tag: tag.slug }));
 }
 
 export default async function BlogTagPage({ params }: { params: Promise<{ tag: string }> }) {
