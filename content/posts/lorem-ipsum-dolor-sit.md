@@ -3,7 +3,7 @@ title: "Lorem Ipsum Dolor Sit Amet Consectetur"
 date: "2024-01-25"
 excerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
 author: "Lorem Author"
-tags: ["lorem", "ipsum", "dolor", "featured"]
+tags: ["lorem", "ipsum", "dolor"]
 featured: true
 readTime: "8 min read"
 featuredImages: ["https://picsum.photos/800/400", "https://picsum.photos/800/400", "https://picsum.photos/800/400"]
