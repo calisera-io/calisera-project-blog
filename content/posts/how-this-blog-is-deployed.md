@@ -22,7 +22,7 @@ The deployment consists of three main parts:
 
 Every push and pull request triggers our CI pipeline defined in `.github/workflows/ci.yml`:
 
-!include ./public/files/github-workflow-ci.yml
+!include ./public/files/github-workflows-ci.yml
 
 This ensures every change is:
 
@@ -34,76 +34,13 @@ This ensures every change is:
 
 When a pull request is merged to main, the deployment pipeline kicks in via `.github/workflows/deploy.yml`:
 
-```yaml
-name: Deploy to S3
-on:
-    pull_request:
-        types: [closed]
-        branches: [main]
-
-permissions:
-    id-token: write
-    contents: read
-
-jobs:
-    deploy:
-        if: github.event.pull_request.merged == true
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 18
-                  cache: 'npm'
-
-            - run: npm ci
-            - run: npm run build
-
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v4
-              with:
-                  role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-                  aws-region: us-east-1
-
-            - name: Deploy to S3
-              run: aws s3 sync out/ s3://blog.calisera.io --delete
-```
+!include ./public/files/github-workflows-deploy.yml
 
 ## Security: OIDC Authentication
 
-Instead of storing AWS access keys as secrets, we use OpenID Connect (OIDC) for secure, keyless authentication. This is configured in our Terraform infrastructure:
+Instead of storing AWS access keys as secrets, we use OpenID Connect (OIDC) for secure, keyless authentication. We define specific S3 IAM permissions for the GitHub Actions role in a policy. This is configured in our Terraform infrastructure `terraform/main.tf`:
 
-```hcl
-resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
-  client_id_list = ["sts.amazonaws.com"]
-  thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
-}
-
-resource "aws_iam_role" "github_actions" {
-  name = "github-actions-deploy-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Federated = aws_iam_openid_connect_provider.github.arn
-      }
-      Action = "sts:AssumeRoleWithWebIdentity"
-      Condition = {
-        StringEquals = {
-          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-        }
-        StringLike = {
-          "token.actions.githubusercontent.com:sub" = "repo:calisera-io/calisera-project-blog:*"
-        }
-      }
-    }]
-  })
-}
-```
+!include ./public/files/terraform-main.tf
 
 This approach provides:
 
@@ -111,33 +48,7 @@ This approach provides:
 -   **Automatic token expiration** after each workflow run
 -   **Repository-specific access** that can't be used elsewhere
 -   **Audit trail** of all authentication events
-
-## IAM Permissions
-
-The GitHub Actions role needs specific S3 permissions to deploy the site:
-
-```hcl
-resource "aws_iam_role_policy" "github_actions_s3" {
-  name = "github-actions-s3-policy"
-  role = aws_iam_role.github_actions.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Action = [
-        "s3:PutObject",
-        "s3:DeleteObject",
-        "s3:ListBucket"
-      ]
-      Resource = [
-        "arn:aws:s3:::blog.calisera.io",
-        "arn:aws:s3:::blog.calisera.io/*"
-      ]
-    }]
-  })
-}
-```
+-   **Specific S3 IAM permissions** for least privilege access
 
 ## Static Site Generation
 
