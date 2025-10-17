@@ -7,9 +7,7 @@
 		"build": "next build --turbopack",
 		"start": "next start",
 		"lint": "eslint",
-		"test": "jest",
-		"fetch-files": "tsx scripts/fetch-github-files.ts",
-		"prebuild": "npm run fetch-files"
+		"test": "jest"
 	},
 	"dependencies": {
 		"@tailwindcss/typography": "^0.5.0-alpha.3",

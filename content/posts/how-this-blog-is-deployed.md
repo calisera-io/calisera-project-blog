@@ -22,7 +22,7 @@ The deployment consists of three main parts:
 
 Every push and pull request triggers our CI pipeline defined in `.github/workflows/ci.yml`:
 
-!include ./public/files/github-workflows-ci.yml
+!include .github/workflows/ci.yml
 
 This ensures every change is:
 
@@ -34,13 +34,13 @@ This ensures every change is:
 
 When a pull request is merged to main, the deployment pipeline kicks in via `.github/workflows/deploy.yml`:
 
-!include ./public/files/github-workflows-deploy.yml
+!include .github/workflows/deploy.yml
 
 ## Security: OIDC Authentication
 
 Instead of storing AWS access keys as secrets, we use OpenID Connect (OIDC) for secure, keyless authentication. We define specific S3 IAM permissions for the GitHub Actions role in a policy. This is configured in our Terraform infrastructure `terraform/main.tf`:
 
-!include ./public/files/terraform-main.tf
+!include terraform/main.tf
 
 This approach provides:
 
