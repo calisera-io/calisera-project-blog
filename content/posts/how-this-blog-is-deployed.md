@@ -8,9 +8,9 @@ tags: ['DevOps', 'CI/CD', 'AWS', 'GitHub Actions', 'Next.js']
 
 This blog runs on a fully automated deployment pipeline that exemplifies modern DevOps practices. Every time code is merged to the main branch, it automatically builds and deploys to production within minutes. Here's how it works.
 
-## Architecture Overview
+## Deployment Overview
 
-The deployment architecture consists of three main components:
+The deployment consists of three main parts:
 
 -   **Next.js Static Site Generation**: The blog is built as a static site using Next.js with static export
 -   **GitHub Actions CI/CD**: Automated testing, building, and deployment pipeline
@@ -22,40 +22,7 @@ The deployment architecture consists of three main components:
 
 Every push and pull request triggers our CI pipeline defined in `.github/workflows/ci.yml`:
 
-```yaml
-name: CI
-
-on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-
-jobs:
-    lint-test-build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-
-            - name: Use Node.js 20.x
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20.x
-                  cache: 'npm'
-
-            - name: Install dependencies
-              run: npm ci
-
-            - name: Run lint
-              run: npm run lint
-
-            - name: Run tests
-              run: npm test
-
-            - name: Build project
-              run: npm run build
-```
+!include ./public/files/github-workflow-ci.yml
 
 This ensures every change is:
 

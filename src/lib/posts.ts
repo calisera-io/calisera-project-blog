@@ -3,6 +3,7 @@ import matter from 'gray-matter';
 import path from 'path';
 import { remark } from 'remark';
 import remarkHtml from 'remark-html';
+import { remarkInclude } from './remark-include';
 
 const postsDirectory = path.join(process.cwd(), 'content/posts');
 
@@ -58,7 +59,10 @@ export async function getPostBySlug(slug: string): Promise<Post> {
 	const fileContents = await fs.promises.readFile(fullPath, 'utf8');
 	const { data, content } = matter(fileContents);
 
-	const processedContent = await remark().use(remarkHtml).process(content);
+	const processedContent = await remark()
+		.use(remarkInclude)
+		.use(remarkHtml)
+		.process(content);
 	const contentHtml = processedContent.toString();
 
 	return {
