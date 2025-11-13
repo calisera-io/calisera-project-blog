@@ -182,7 +182,7 @@ Treating a side project professionally means documenting the details—even when
 
 While this article covers the _why_ behind our roadmap, all the detailed _what_ and _how_ for every feature is tracked in our living Notion document. It serves as the single source of truth for the project, making sure that what we build is exactly what we scoped.
 
-**[Technical Feature Specification: Complete MVP Scope](https://your-notion-link-here)**
+**[Technical Feature Specification: Complete MVP Scope](https://www.notion.so/Technical-Feature-Specification-Complete-MVP-Scope-28f1271c06e180bab067e716228d8c9d)**
 
 ---
 
